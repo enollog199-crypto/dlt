@@ -1,3 +1,16 @@
+# 在 app.py 顶部添加导入
+from core.predictor import generate_ai_prediction
+
+@app.route('/')
+def index():
+    # 1. 获取历史数据
+    history = LotteryData.query.order_by(LotteryData.period.desc()).limit(20).all()
+    
+    # 2. 调用AI预测函数
+    ai_results = generate_ai_prediction()
+    
+    # 3. 传给前端模板
+    return render_template('index.html', history=history, ai_results=ai_results)
 import os
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
