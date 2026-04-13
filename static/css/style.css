@@ -1,0 +1,25 @@
+/* 赛博朋克霓虹效果 */
+:root {
+    --neon-green: #00ffcc;
+    --neon-pink: #ff00ff;
+    --dark-bg: #0b0e14;
+}
+
+body {
+    background: var(--dark-bg);
+    color: var(--neon-green);
+    background-image: linear-gradient(rgba(0, 255, 204, 0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(0, 255, 204, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.ai-card {
+    border: 2px solid var(--neon-pink);
+    box-shadow: 0 0 20px var(--neon-pink);
+    background: rgba(255, 0, 255, 0.05);
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.ball-red { color: #ff4d4d; font-weight: bold; }
+.ball-blue { color: #4d94ff; font-weight: bold; }
