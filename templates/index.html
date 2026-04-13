@@ -2,58 +2,117 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>超级大乐透 - AI虚拟娱乐平台</title>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
-        body { background-color: #0b0e14; color: #00ffcc; font-family: 'Segoe UI', sans-serif; }
-        .container { width: 90%; margin: auto; padding-top: 50px; }
-        .card { background: rgba(20, 24, 35, 0.8); border: 1px solid #00ffcc; box-shadow: 0 0 15px #00ffcc; padding: 20px; border-radius: 10px; }
-        h1 { text-align: center; text-transform: uppercase; letter-spacing: 5px; color: #ff00ff; text-shadow: 0 0 10px #ff00ff; }
-        .data-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .data-table th, .data-table td { border: 1px solid #333; padding: 10px; text-align: center; }
-        .footer { margin-top: 50px; font-size: 12px; color: #666; text-align: center; }
+        body { background-color: #0b0e14; color: #00ffcc; font-family: 'Courier New', monospace; margin: 0; }
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 5%;
+            background: rgba(0, 255, 204, 0.1);
+            border-bottom: 1px solid #00ffcc;
+        }
+        .container { width: 90%; margin: auto; padding: 30px 0; }
+        .card { 
+            background: rgba(20, 24, 35, 0.8); 
+            border: 1px solid #00ffcc; 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin-bottom: 30px;
+        }
+        .ai-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .ai-card { 
+            border: 1px solid #ff00ff; 
+            padding: 15px; 
+            background: rgba(255, 0, 255, 0.05);
+            box-shadow: inset 0 0 10px #ff00ff;
+        }
+        .ball { 
+            display: inline-block; width: 35px; height: 35px; line-height: 35px; 
+            text-align: center; border-radius: 50%; margin: 2px; font-weight: bold;
+        }
+        .red { background: #ff4d4d; color: white; }
+        .blue { background: #4d94ff; color: white; }
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .data-table th, .data-table td { border: 1px solid #333; padding: 12px; text-align: center; }
+        .btn-bet { 
+            background: #ff00ff; color: white; border: none; padding: 10px 20px; 
+            cursor: pointer; font-weight: bold; margin-top: 10px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>LOTTERY AI SYSTEM</h1>
-        <div class="card">
-            <h3>近期开奖走势 (ECharts)</h3>
-            <div id="chart" style="width: 100%; height: 400px;"></div>
+    <div class="nav-bar">
+        <div style="font-weight: bold; color: #ff00ff;">LOTTERY_OS v2.6</div>
+        <div>
+            {% if current_user.is_authenticated %}
+                <span>ID: {{ current_user.username }} | 虚拟积分: <b style="color:#f7ba2a;">{{ current_user.points }}</b></span>
+                <a href="{{ url_for('logout') }}" style="color: #ff4d4d; margin-left: 15px; text-decoration: none;">[ 登出 ]</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" style="color: #00ffcc; text-decoration: none;">[ 登录 ]</a>
+                <a href="{{ url_for('register') }}" style="color: #00ffcc; margin-left: 10px; text-decoration: none;">[ 注册 ]</a>
+            {% endif %}
         </div>
-        
-        <div class="card" style="margin-top: 30px;">
-            <h3>历史开奖记录</h3>
+    </div>
+
+    <div class="container">
+        <h2 style="color: #ff00ff; text-shadow: 0 0 5px #ff00ff;">// AI_PREDICTIONS_CHANNEL</h2>
+        <div class="ai-grid">
+            {% for res in ai_results %}
+            <div class="ai-card">
+                <small style="color: #aaa;">模式: {{ res.type }}</small>
+                <p style="font-size: 1.2em; letter-spacing: 2px;">{{ res.numbers }}</p>
+                <button class="btn-bet" onclick="alert('虚拟投注功能开发中...')">模拟投注 (-2积分)</button>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="card" style="margin-top: 40px;">
+            <h3 style="margin-top:0;">趋势分析图表</h3>
+            <div id="main-chart" style="width: 100%; height: 350px;"></div>
+        </div>
+
+        <div class="card">
+            <h3>历史开奖记录 (最近20期)</h3>
             <table class="data-table">
                 <thead>
-                    <tr><th>期号</th><th>前区</th><th>后区</th></tr>
+                    <tr style="background: #1a1a2e;">
+                        <th>期号</th><th>日期</th><th>前区</th><th>后区</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {% for item in history %}
                     <tr>
                         <td>{{ item.period }}</td>
-                        <td style="color: #f7ba2a;">{{ item.front_balls }}</td>
-                        <td style="color: #409eff;">{{ item.back_balls }}</td>
+                        <td>{{ item.draw_date }}</td>
+                        <td style="color: #ff4d4d;">{{ item.front_balls }}</td>
+                        <td style="color: #4d94ff;">{{ item.back_balls }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-
-        <div class="footer">
-            法律声明：本站仅为虚拟娱乐实验，不涉及真实货币交易。18岁以下禁止使用。
-        </div>
     </div>
 
     <script>
-        var chartDom = document.getElementById('chart');
+        var chartDom = document.getElementById('main-chart');
         var myChart = echarts.init(chartDom, 'dark');
-        // 这里可以根据 history 数据动态生成折线图
         var option = {
             backgroundColor: 'transparent',
-            xAxis: { type: 'category', data: ['1', '2', '3', '4', '5'] },
-            yAxis: { type: 'value' },
-            series: [{ data: [15, 23, 22, 21, 13], type: 'line', smooth: true, color: '#00ffcc' }]
+            tooltip: { trigger: 'axis' },
+            xAxis: { type: 'category', data: ['26030', '26031', '26032', '26033', '26034'] },
+            yAxis: { type: 'value', splitLine: { lineStyle: { color: '#333' } } },
+            series: [{
+                name: '前区和值',
+                type: 'line',
+                smooth: true,
+                data: [85, 102, 76, 115, 94],
+                itemStyle: { color: '#00ffcc' },
+                areaStyle: { opacity: 0.1 }
+            }]
         };
         myChart.setOption(option);
     </script>
