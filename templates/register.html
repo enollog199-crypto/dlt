@@ -1,18 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-    <title>注册 - 赛博大乐透</title>
+    <meta charset="UTF-8">
+    <title>加入系统 - 赛博大乐透</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .register-box { max-width: 400px; margin: 80px auto; padding: 40px; background: rgba(10, 15, 25, 0.9); border: 2px solid #00ffcc; box-shadow: 0 0 20px #00ffcc; border-radius: 15px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 15px 0; background: #1a1a2e; border: 1px solid #ff00ff; color: #ff00ff; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: transparent; border: 2px solid #00ffcc; color: #00ffcc; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #00ffcc; color: black; box-shadow: 0 0 15px #00ffcc; }
+    </style>
 </head>
-<body class="container">
-    <div class="card" style="max-width: 400px; margin: 100px auto;">
-        <h2>用户注册</h2>
+<body>
+    <div class="register-box">
+        <h2 style="color: #ff00ff; text-shadow: 0 0 10px #ff00ff;">NEW ENTITY REGISTRATION</h2>
         <form method="POST">
-            <input type="text" name="username" placeholder="用户名" required style="width:100%; margin-bottom:10px;">
-            <input type="password" name="password" placeholder="密码" required style="width:100%; margin-bottom:10px;">
-            <button type="submit" style="background: #ff00ff; color: white; border: none; padding: 10px; width: 100%;">立即注册</button>
+            <input type="text" name="username" placeholder="SET USERNAME / 设置用户名" required>
+            <input type="password" name="password" placeholder="SET PASSWORD / 设置密码" required>
+            <button type="submit">建立连接 (获得1000积分)</button>
         </form>
-        <p><a href="{{ url_for('login') }}" style="color: #00ffcc;">已有账号？去登录</a></p>
+        <p style="margin-top:20px;"><a href="{{ url_for('login') }}" style="color: #666; text-decoration: none;">已有权限？去登录</a></p>
     </div>
 </body>
 </html>
