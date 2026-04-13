@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>超级大乐透 - AI虚拟娱乐平台</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        body { background-color: #0b0e14; color: #00ffcc; font-family: 'Segoe UI', sans-serif; }
+        .container { width: 90%; margin: auto; padding-top: 50px; }
+        .card { background: rgba(20, 24, 35, 0.8); border: 1px solid #00ffcc; box-shadow: 0 0 15px #00ffcc; padding: 20px; border-radius: 10px; }
+        h1 { text-align: center; text-transform: uppercase; letter-spacing: 5px; color: #ff00ff; text-shadow: 0 0 10px #ff00ff; }
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .data-table th, .data-table td { border: 1px solid #333; padding: 10px; text-align: center; }
+        .footer { margin-top: 50px; font-size: 12px; color: #666; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LOTTERY AI SYSTEM</h1>
+        <div class="card">
+            <h3>近期开奖走势 (ECharts)</h3>
+            <div id="chart" style="width: 100%; height: 400px;"></div>
+        </div>
+        
+        <div class="card" style="margin-top: 30px;">
+            <h3>历史开奖记录</h3>
+            <table class="data-table">
+                <thead>
+                    <tr><th>期号</th><th>前区</th><th>后区</th></tr>
+                </thead>
+                <tbody>
+                    {% for item in history %}
+                    <tr>
+                        <td>{{ item.period }}</td>
+                        <td style="color: #f7ba2a;">{{ item.front_balls }}</td>
+                        <td style="color: #409eff;">{{ item.back_balls }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            法律声明：本站仅为虚拟娱乐实验，不涉及真实货币交易。18岁以下禁止使用。
+        </div>
+    </div>
+
+    <script>
+        var chartDom = document.getElementById('chart');
+        var myChart = echarts.init(chartDom, 'dark');
+        // 这里可以根据 history 数据动态生成折线图
+        var option = {
+            backgroundColor: 'transparent',
+            xAxis: { type: 'category', data: ['1', '2', '3', '4', '5'] },
+            yAxis: { type: 'value' },
+            series: [{ data: [15, 23, 22, 21, 13], type: 'line', smooth: true, color: '#00ffcc' }]
+        };
+        myChart.setOption(option);
+    </script>
+</body>
+</html>
